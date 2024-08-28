@@ -118,6 +118,7 @@ export default async function decorate(block) {
             },
           };
           webapp.setConf(config);
+          webapp.setInitialStateToSelectedStore('990002');
           webapp.render();
         }
         loadWebApp();
