@@ -241,6 +241,10 @@
   }
 
   /* stacked images variant */
+  .text-with-image.stacked-images .text-with-image-row {
+    gap: 104px;
+  }
+
   .text-with-image.stacked-images .column-with-images p:nth-child(2) img {
     width: 216px;
     right: 81px;
