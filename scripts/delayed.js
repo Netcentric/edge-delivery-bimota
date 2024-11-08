@@ -1,5 +1,28 @@
 import { loadScript } from './aem.js';
 
+
+function injectScript(src, crossOrigin = '') {
+  window.scriptsLoaded = window.scriptsLoaded || [];
+
+  if (window.scriptsLoaded.indexOf(src)) {
+    const head = document.querySelector('head');
+    const script = document.createElement('script');
+
+    script.src = src;
+    script.setAttribute('async', 'true');
+    if (['anonymous', 'use-credentials'].includes(crossOrigin)) {
+      script.crossOrigin = crossOrigin;
+    }
+    head.append(script);
+    window.scriptsLoaded.push(src);
+  }
+}
+
+function loadLaunch() {
+  window.adobeDataLayer = window.adobeDataLayer || [];
+  injectScript('https://assets.adobedtm.com/53c8e773d591/d826b4085ef5/launch-268ad0976d20.min.js');
+}
+
 // OneTrust Cookies Consent Notice
 if (!window.location.pathname.includes('srcdoc')
   && !['localhost', 'hlx.page', 'hlx.live', 'aem.page', 'aem.live'].some((url) => window.location.host.includes(url))) {
@@ -31,31 +54,8 @@ if (!window.location.pathname.includes('srcdoc')
       // reloading the page only when the active group has changed
       if (!isSameGroups(currentOnetrustActiveGroups, window.OnetrustActiveGroups)) {
         window.location.reload();
+        loadLaunch();
       }
     });
   };
 }
-
-function injectScript(src, crossOrigin = '') {
-  window.scriptsLoaded = window.scriptsLoaded || [];
-
-  if (window.scriptsLoaded.indexOf(src)) {
-    const head = document.querySelector('head');
-    const script = document.createElement('script');
-
-    script.src = src;
-    script.setAttribute('async', 'true');
-    if (['anonymous', 'use-credentials'].includes(crossOrigin)) {
-      script.crossOrigin = crossOrigin;
-    }
-    head.append(script);
-    window.scriptsLoaded.push(src);
-  }
-}
-
-function loadLaunch() {
-  window.adobeDataLayer = window.adobeDataLayer || [];
-  injectScript('https://assets.adobedtm.com/53c8e773d591/d826b4085ef5/launch-268ad0976d20.min.js');
-}
-
-loadLaunch();
