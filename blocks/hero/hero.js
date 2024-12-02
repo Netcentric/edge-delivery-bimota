@@ -1,19 +1,18 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { customDecoreateIcons, getTextLabel } from '../../scripts/scripts.js';
 
-const addPauseButton = (block) => {
+const addPauseButton = (video, block, id) => {
   const pauseButton = document.createElement('button');
   pauseButton.classList.add('hero-pause-button');
   pauseButton.setAttribute('aria-label', getTextLabel('pause'));
+  pauseButton.setAttribute('id', id);
   pauseButton.innerHTML = `
     <span class="icon icon-pause"></span>
     <span class="icon icon-play hidden"></span>
   `;
 
   pauseButton.addEventListener('click', () => {
-    const video = block.querySelector('video');
     const [pauseIcon, playIcon] = pauseButton.querySelectorAll('span');
-
     if (video.paused) {
       video.play();
       pauseIcon.classList.remove('hidden');
@@ -138,7 +137,7 @@ const startCountdown = (block, eventDate) => {
 export default function decorate(block) {
   const firstCell = block.querySelector(':scope > div > div');
   const [picture, xsPicture] = firstCell.querySelectorAll('picture');
-  const video = firstCell.querySelector('video');
+  const videos = firstCell.querySelectorAll('video');
   const headings = firstCell.querySelectorAll('h1, h2, h3, h4, h5, h6');
   const links = firstCell.querySelectorAll('a');
   const dateEl = block.querySelector(':scope > div:nth-child(2) > div');
@@ -156,10 +155,14 @@ export default function decorate(block) {
     block.classList.add('hero-multiple-images');
   }
 
-  if (video) {
+  videos.forEach((video, index) => {
     video.parentElement.classList.add('video-wrapper');
-    addPauseButton(block);
-  }
+    addPauseButton(video, block, `video-${index}`);
+
+    if (index > 0) {
+      block.classList.add('hero-multiple-videos');
+    }
+  });
 
   const textWrapper = document.createElement('div');
   textWrapper.classList.add('hero-text-wrapper', 'dark');
